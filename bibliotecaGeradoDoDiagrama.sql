@@ -11,7 +11,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema mydb
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
+CREATE SCHEMA `mydb8` DEFAULT CHARACTER SET utf8 ;
 -- -----------------------------------------------------
 -- Schema biblioteca
 -- -----------------------------------------------------
@@ -19,13 +19,12 @@ CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
 -- -----------------------------------------------------
 -- Schema biblioteca
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `biblioteca` ;
-USE `mydb` ;
+USE `mydb8` ;
 
 -- -----------------------------------------------------
 -- Table `mydb`.`editora`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`editora` (
+CREATE TABLE `mydb8`.`editora` (
   `ideditora` INT NOT NULL,
   `nome_editora` VARCHAR(45) NULL,
   `telefone` VARCHAR(45) NULL,
@@ -37,7 +36,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`autores`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`autores` (
+CREATE TABLE `mydb8`.`autores` (
   `idautores` INT NOT NULL,
   `nome_autor` VARCHAR(45) NULL,
   `telefone` VARCHAR(45) NULL,
@@ -49,7 +48,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`Biblioteca`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Biblioteca` (
+CREATE TABLE `mydb8`.`Biblioteca` (
   `idBiblioteca` INT NOT NULL,
   ` nome` VARCHAR(25) NULL,
   `cnpj` VARCHAR(25) NULL,
@@ -59,16 +58,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Biblioteca` (
   `editora_id` INT NOT NULL,
   `autores_id` INT NOT NULL,
   PRIMARY KEY (`idBiblioteca`, `autores_id`, `editora_id`),
-  INDEX `fk_Biblioteca_editora1_idx` (`editora_id` ASC) VISIBLE,
-  INDEX `fk_Biblioteca_autores1_idx` (`autores_id` ASC) VISIBLE,
+  INDEX `fk_Biblioteca_editora1_idx` (`editora_id` ASC),
+  INDEX `fk_Biblioteca_autores1_idx` (`autores_id` ASC),
   CONSTRAINT `fk_Biblioteca_editora1`
     FOREIGN KEY (`editora_id`)
-    REFERENCES `mydb`.`editora` (`ideditora`)
+    REFERENCES `mydb8`.`editora` (`ideditora`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Biblioteca_autores1`
     FOREIGN KEY (`autores_id`)
-    REFERENCES `mydb`.`autores` (`idautores`)
+    REFERENCES `mydb8`.`autores` (`idautores`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -77,7 +76,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`user`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`user` (
+CREATE TABLE `mydb8`.`user` (
   `username` VARCHAR(16) NOT NULL,
   `email` VARCHAR(255) NULL,
   `password` VARCHAR(32) NOT NULL,
@@ -87,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`user` (
 -- -----------------------------------------------------
 -- Table `mydb`.`livros`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`livros` (
+CREATE TABLE `mydb8`.`livros` (
   `idlivros` INT NOT NULL,
   `nome_livros` VARCHAR(45) NULL,
   `descricao` VARCHAR(45) NULL,
@@ -96,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`livros` (
   INDEX `fk_livros_autores1_idx` (`autores_id` ASC),
   CONSTRAINT `fk_livros_autores1`
     FOREIGN KEY (`autores_id`)
-    REFERENCES `mydb`.`autores` (`idautores`)
+    REFERENCES `mydb8`.`autores` (`idautores`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -105,7 +104,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`registro`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`registro` (
+CREATE TABLE `mydb8`.`registro` (
   `idregistro` INT NOT NULL,
   `livro_id` VARCHAR(45) NULL,
   `area_conhecimento` VARCHAR(45) NULL,
@@ -115,7 +114,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`registro` (
   INDEX `fk_registro_livros1_idx` (`livros_id` ASC),
   CONSTRAINT `fk_registro_livros1`
     FOREIGN KEY (`livros_id`)
-    REFERENCES `mydb`.`livros` (`idlivros`)
+    REFERENCES `mydb8`.`livros` (`idlivros`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -124,13 +123,13 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`cod_emprestimo`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`cod_emprestimo` (
+CREATE TABLE `mydb8`.`cod_emprestimo` (
   `idcod_emprestimo` INT NOT NULL,
   `livros_id` INT NOT NULL,
   `registro_id` INT NOT NULL,
   PRIMARY KEY (`idcod_emprestimo`, `livros_id`, `registro_id`),
   INDEX `fk_cod_emprestimo_livros1_idx` (`livros_id` ASC),
-  INDEX `fk_cod_emprestimo_registro1_idx` (`registro_id` ASC) VISIBLE,
+  INDEX `fk_cod_emprestimo_registro1_idx` (`registro_id` ASC),
   CONSTRAINT `fk_cod_emprestimo_livros1`
     FOREIGN KEY (`livros_id`)
     REFERENCES `mydb`.`livros` (`idlivros`)
@@ -138,7 +137,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`cod_emprestimo` (
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_cod_emprestimo_registro1`
     FOREIGN KEY (`registro_id`)
-    REFERENCES `mydb`.`registro` (`idregistro`)
+    REFERENCES `mydb8`.`registro` (`idregistro`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -147,7 +146,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`usuarios`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`usuarios` (
+CREATE TABLE `mydb8`.`usuarios` (
   `idusuarios` INT NOT NULL,
   `tipo_usuario` ENUM('Professor', 'Aluno', 'Funcionário') NULL,
   `nome` VARCHAR(45) NULL,
@@ -157,9 +156,9 @@ CREATE TABLE IF NOT EXISTS `mydb`.`usuarios` (
   `endereco` VARCHAR(45) NULL,
   `cidade` VARCHAR(45) NULL,
   `estado` VARCHAR(45) NULL,
-  `cod_emprestimo` INT GENERATED ALWAYS AS () VIRTUAL,
+  `cod_emprestimo` INT,
   PRIMARY KEY (`idusuarios`, `cod_emprestimo`),
-  INDEX `fk_usuarios_cod_emprestimo1_idx` (`cod_emprestimo` ASC) VISIBLE,
+  INDEX `fk_usuarios_cod_emprestimo1_idx` (`cod_emprestimo` ASC) ,
   CONSTRAINT `fk_usuarios_cod_emprestimo1`
     FOREIGN KEY (`cod_emprestimo`)
     REFERENCES `mydb`.`cod_emprestimo` (`idcod_emprestimo`)
@@ -171,122 +170,14 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`cod_fornecimento`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`cod_fornecimento` (
+CREATE TABLE `mydb8`.`cod_fornecimento` (
   `idcod_fornecimento` INT NOT NULL,
   `editora_id` INT NOT NULL,
   PRIMARY KEY (`idcod_fornecimento`, `editora_id`),
   INDEX `fk_cod_fornecimento_editora_idx` (`editora_id` ASC),
   CONSTRAINT `fk_cod_fornecimento_editora`
     FOREIGN KEY (`editora_id`)
-    REFERENCES `mydb`.`editora` (`ideditora`)
+    REFERENCES `mydb8`.`editora` (`ideditora`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
-USE `biblioteca` ;
-
--- -----------------------------------------------------
--- Table `biblioteca`.`biblioteca`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `biblioteca`.`biblioteca` (
-  `id_biblioteca` INT NULL DEFAULT NULL AUTO_INCREMENT,
-  `nome` VARCHAR(25) NULL DEFAULT NULL,
-  `cnpj` VARCHAR(25) NULL DEFAULT NULL,
-  `endereco` VARCHAR(25) NULL DEFAULT NULL,
-  `telefone` VARCHAR(25) NULL DEFAULT NULL,
-  `email` VARCHAR(25) NULL DEFAULT NULL,
-  `estado` VARCHAR(2) NULL DEFAULT NULL,
-  `autor_id` INT NULL DEFAULT NULL,
-  `editora_id` INT NULL DEFAULT NULL,
-  PRIMARY KEY (`id_biblioteca`))
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `biblioteca`.`autores`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `biblioteca`.`autores` (
-  `id_autor` INT NULL DEFAULT NULL AUTO_INCREMENT,
-  `nome_autor` VARCHAR(25) NULL DEFAULT NULL,
-  `telefone` VARCHAR(25) NULL DEFAULT NULL,
-  `endereco` VARCHAR(25) NULL DEFAULT NULL,
-  PRIMARY KEY (`id_autor`))
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `biblioteca`.`editora`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `biblioteca`.`editora` (
-  `id_editora` INT NULL DEFAULT NULL AUTO_INCREMENT,
-  `nome_editora` VARCHAR(25) NULL DEFAULT NULL,
-  `telefone` VARCHAR(25) NULL DEFAULT NULL,
-  `endereco` VARCHAR(25) NULL DEFAULT NULL,
-  PRIMARY KEY (`id_editora`))
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `biblioteca`.`livros`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `biblioteca`.`livros` (
-  `id_livro` INT NULL DEFAULT NULL AUTO_INCREMENT,
-  `nome_livro` VARCHAR(25) NULL DEFAULT NULL,
-  `descricao` VARCHAR(25) NULL DEFAULT NULL,
-  PRIMARY KEY (`id_livro`))
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `biblioteca`.`registro`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `biblioteca`.`registro` (
-  `id_registro` INT NULL DEFAULT NULL AUTO_INCREMENT,
-  `livro_id` INT NULL DEFAULT NULL,
-  `area_conhecimento` VARCHAR(60) NULL DEFAULT NULL,
-  `data_fab` DATE NULL DEFAULT NULL,
-  PRIMARY KEY (`id_registro`))
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `biblioteca`.`usuarios`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `biblioteca`.`usuarios` (
-  `id_usuario` INT NULL DEFAULT NULL AUTO_INCREMENT,
-  `tipo_usuario` ENUM('Professor', 'Aluno', 'Funcionário') NULL DEFAULT NULL,
-  `nome` VARCHAR(50) NULL DEFAULT NULL,
-  `cpf` VARCHAR(11) NULL DEFAULT NULL,
-  `data_nasc` DATE NULL DEFAULT NULL,
-  `telefone` VARCHAR(20) NULL DEFAULT NULL,
-  `endereco` VARCHAR(50) NULL DEFAULT NULL,
-  `cidade` VARCHAR(30) NULL DEFAULT NULL,
-  `estado` VARCHAR(2) NULL DEFAULT NULL,
-  PRIMARY KEY (`id_usuario`))
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `biblioteca`.`cod_fornecimento`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `biblioteca`.`cod_fornecimento` (
-  `id_cod_fornecimento` INT NULL DEFAULT NULL AUTO_INCREMENT,
-  `editora_id` INT NULL DEFAULT NULL,
-  PRIMARY KEY (`id_cod_fornecimento`))
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `biblioteca`.`cod_emprestimo`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `biblioteca`.`cod_emprestimo` (
-  `id_cod_emprestimo` INT NULL DEFAULT NULL AUTO_INCREMENT,
-  `registro_id` INT NULL DEFAULT NULL,
-  `livro_id` INT NULL DEFAULT NULL,
-  PRIMARY KEY (`id_cod_emprestimo`))
-DEFAULT CHARACTER SET = utf8;
-
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
